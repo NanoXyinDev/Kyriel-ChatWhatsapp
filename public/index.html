@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KYRIEL WHATSAPP</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-bg">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-icon"><i class="fab fa-whatsapp"></i></div>
+        <h1>KYRIEL WHATSAPP</h1>
+        <p>Multi-Device WhatsApp Web</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="tab-btn active" data-tab="login">Masuk</button>
+        <button class="tab-btn" data-tab="register">Daftar</button>
+      </div>
+      <div id="login-form" class="auth-form">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="login-username" placeholder="Username atau Email" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="login-password" placeholder="Password">
+        </div>
+        <button class="btn-primary" onclick="handleLogin()">
+          <i class="fas fa-sign-in-alt"></i> Masuk
+        </button>
+      </div>
+      <div id="register-form" class="auth-form hidden">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="reg-username" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="reg-email" placeholder="Email" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="reg-password" placeholder="Password">
+        </div>
+        <button class="btn-primary" onclick="handleRegister()">
+          <i class="fas fa-user-plus"></i> Daftar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="app-screen" class="screen">
+
+  <!-- Mobile Header -->
+  <div class="mobile-header">
+    <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <span class="mobile-title">KYRIEL</span>
+    <button class="icon-btn" onclick="toggleGlobalChat()"><i class="fas fa-globe"></i></button>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="user-info">
+        <div class="avatar" id="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-details">
+          <span class="username" id="sidebar-username">User</span>
+          <span class="role-badge" id="user-role">FREE</span>
+        </div>
+      </div>
+      <div class="sidebar-actions">
+        <button class="icon-btn" onclick="toggleGlobalChat()" title="Global"><i class="fas fa-globe"></i></button>
+        <button class="icon-btn" onclick="toggleLogs()" title="Logs"><i class="fas fa-terminal"></i></button>
+        <button class="icon-btn" onclick="toggleSpotify()" title="Spotify"><i class="fab fa-spotify"></i></button>
+        <button class="icon-btn" onclick="togglePopup()" title="Pop-up"><i class="fas fa-external-link-alt"></i></button>
+        <button class="icon-btn" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </div>
+    <div class="sidebar-scroll">
+      <div class="section-header">
+        <span><i class="fab fa-whatsapp"></i> Sessions</span>
+        <span class="badge" id="session-count">0/1</span>
+      </div>
+      <div class="sessions-list" id="sessions-list">
+        <div class="empty-state">
+          <i class="fas fa-mobile-alt"></i>
+          <p>Belum ada session</p>
+          <button class="btn-ghost" onclick="openConnectModal()">+ Tambah Session</button>
+        </div>
+      </div>
+      <div class="section-header"><span><i class="fas fa-crown"></i> Plan</span></div>
+      <div class="plan-card" id="plan-card"></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Loading -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <h3 id="loading-text">Connecting...</h3>
+        <div class="loading-logs" id="loading-logs"></div>
+      </div>
+    </div>
+
+    <!-- Welcome -->
+    <div id="welcome-state" class="content-area">
+      <div class="welcome-box">
+        <div class="welcome-icon"><i class="fab fa-whatsapp"></i></div>
+        <h2>Selamat Datang</h2>
+        <p>Hubungkan WhatsApp dan mulai chat dari browser</p>
+        <div class="features">
+          <div class="feat"><i class="fas fa-qrcode"></i><span>QR & Pairing</span></div>
+          <div class="feat"><i class="fas fa-eye-slash"></i><span>View Once</span></div>
+          <div class="feat"><i class="fas fa-globe"></i><span>Global Chat</span></div>
+          <div class="feat"><i class="fas fa-music"></i><span>Spotify</span></div>
+        </div>
+        <button class="btn-primary btn-lg" onclick="openConnectModal()">
+          <i class="fas fa-plug"></i> Hubungkan WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div id="chat-area" class="content-area hidden">
+      <div class="chat-header">
+        <div class="chat-contact">
+          <div class="avatar sm"><i class="fas fa-user"></i></div>
+          <div class="contact-info">
+            <span class="contact-name" id="chat-contact-name">Contact</span>
+            <span class="contact-status" id="chat-contact-status">online</span>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <button class="icon-btn" onclick="openViewOnceModal()" title="View Once"><i class="fas fa-eye-slash"></i></button>
+          <button class="icon-btn" onclick="closeChat()" title="Close"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input">
+        <button class="icon-btn" onclick="document.getElementById('file-input').click()"><i class="fas fa-paperclip"></i></button>
+        <input type="file" id="file-input" class="hidden" onchange="handleFileSelect(event)">
+        <div class="input-wrap"><input type="text" id="message-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter')sendMessage()"></div>
+        <button class="icon-btn send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- CONNECT MODAL -->
+<div id="connect-modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3><i class="fab fa-whatsapp"></i> Hubungkan WhatsApp</h3>
+      <button class="close-btn" onclick="closeConnectModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="method-tabs">
+        <button class="method-btn active" data-method="qr" onclick="selectMethod('qr')"><i class="fas fa-qrcode"></i>QR Code</button>
+        <button class="method-btn" data-method="pairing" onclick="selectMethod('pairing')"><i class="fas fa-mobile-alt"></i>Pairing</button>
+      </div>
+      <div id="qr-section" class="method-content">
+        <div class="qr-box" id="qr-display"><i class="fas fa-qrcode"></i><p>QR Code akan muncul</p></div>
+      </div>
+      <div id="pairing-section" class="method-content hidden">
+        <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="phone-number" placeholder="+62 8xx-xxxx-xxxx"></div>
+        <div class="pairing-code" id="pairing-code-display"><span class="placeholder">Kode akan muncul</span></div>
+      </div>
+      <button class="btn-primary btn-full" onclick="startConnection()"><i class="fas fa-plug"></i> Hubungkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- GLOBAL CHAT MODAL -->
+<div id="global-chat-modal" class="modal hidden">
+  <div class="modal-box modal-lg">
+    <div class="modal-head"><h3><i class="fas fa-globe"></i> Global Chat</h3><button class="close-btn" onclick="toggleGlobalChat()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body flex-col">
+      <div class="global-messages" id="global-messages"></div>
+      <div class="global-input"><input type="text" id="global-message-input" placeholder="Chat ke semua user..." onkeypress="if(event.key==='Enter')sendGlobalMessage()"><button class="btn-primary" onclick="sendGlobalMessage()"><i class="fas fa-paper-plane"></i></button></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGS MODAL -->
+<div id="logs-modal" class="modal hidden">
+  <div class="modal-box modal-lg">
+    <div class="modal-head"><h3><i class="fas fa-terminal"></i> Live Logs</h3><button class="close-btn" onclick="toggleLogs()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><div class="logs-box" id="logs-container"><div class="log-entry info"><span class="log-time">--:--</span><span class="log-tag">[INFO]</span><span class="log-text">System ready</span></div></div></div>
+  </div>
+</div>
+
+<!-- SPOTIFY MODAL -->
+<div id="spotify-modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head"><h3><i class="fab fa-spotify"></i> Spotify</h3><button class="close-btn" onclick="toggleSpotify()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="spotify-player">
+        <iframe id="spotify-iframe" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW ONCE MODAL -->
+<div id="viewonce-modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head"><h3><i class="fas fa-eye-slash"></i> View Once</h3><button class="close-btn" onclick="closeViewOnceModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <input type="file" id="viewonce-file" accept="image/*,video/*" onchange="previewViewOnce(event)">
+      <div class="preview-box" id="viewonce-preview"></div>
+      <button class="btn-primary btn-full" onclick="sendViewOnce()"><i class="fas fa-paper-plane"></i> Kirim View Once</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toast-container"></div>
+
+<script src="/js/config.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
